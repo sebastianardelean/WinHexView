@@ -5,7 +5,7 @@
 
 Command::Command(std::shared_ptr<ContentFormat> obj)
 {
-	
+
 	gObj = obj;
 }
 

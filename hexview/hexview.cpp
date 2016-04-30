@@ -67,7 +67,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	reader->SetInputFile(file_path);
 	try{
-		
+
 		if ((buffer = reader->LoadFileContent(&buffer_size)) != nullptr){
 			if (upper_limit == 0){
 				upper_limit = buffer_size;
@@ -75,7 +75,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			format->Configure((byte*)buffer, upper_limit);
 			command->Execute();
 			std::cout << format->GetFormattedOutput() << std::flush;
-			
+
 		}
 
 	}

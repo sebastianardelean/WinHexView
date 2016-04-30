@@ -11,7 +11,7 @@ public:
 	void DecimalDisplay();
 	void Configure(byte * buffer, DWORD bufferSize);
 	std::string GetFormattedOutput();
-	
+
 private:
 	byte *gBuffer;
 	DWORD gBufferSize;

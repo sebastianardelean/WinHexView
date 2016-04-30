@@ -10,6 +10,6 @@ public:
 private:
 	std::shared_ptr<ContentFormat>gObj;
 	void(ContentFormat::*gMethod)();
-	
+
 };
 

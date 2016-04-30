@@ -4,18 +4,18 @@
 
 Display::Display()
 {
-	
+
 }
 
 
 Display::~Display()
 {
-	
+
 }
-void Display::Configure(byte * buffer,DWORD bufferSize)
+void Display::Configure(byte * buffer, DWORD bufferSize)
 {
 	gBuffer = buffer;
-		
+
 	gBufferSize = bufferSize;
 }
 
@@ -31,7 +31,7 @@ void Display::AsciiPrint()
 		printf("%02x %02x %02x %02x %02x %02x %02x %02x  ",
 			gBuffer[i] >> 8, gBuffer[i], gBuffer[i + 1] >> 8, gBuffer[i + 1], gBuffer[i + 2] >> 8, gBuffer[i + 2], gBuffer[i + 3] >> 8, gBuffer[i + 3]);
 		printf("%02x %02x %02x %02x %02x %02x %02x %02x  |",
-			gBuffer[i + 4] >> 8, gBuffer[i + 4], gBuffer[i + 5] >> 8, gBuffer[i + 5], gBuffer[i + 6] >> 8, gBuffer[i + 6], gBuffer[i + 7] >> 8, gBuffer[i + 7] );
+			gBuffer[i + 4] >> 8, gBuffer[i + 4], gBuffer[i + 5] >> 8, gBuffer[i + 5], gBuffer[i + 6] >> 8, gBuffer[i + 6], gBuffer[i + 7] >> 8, gBuffer[i + 7]);
 		for (byte b = 0; b < gNoOfBits; b++){
 			if (gBuffer[i + b] < dot_ascii_code){//0x002e is ascii code for .
 				printf("%c%c", (gBuffer[i + b] >> 8) + dot_ascii_code, gBuffer[i + b] + dot_ascii_code);
@@ -43,7 +43,7 @@ void Display::AsciiPrint()
 				else{
 					printf("%c%c", (gBuffer[i + b]) >> 8, gBuffer[i + b]);
 				}
-				
+
 			}
 		}
 		printf("|");
@@ -60,8 +60,8 @@ void Display::DefaultPrint()
 	for (i = 0; i < gBufferSize; i += gNoOfBits)
 	{
 		printf("\n0x%08x  ", offset);
-		printf("%04x %04x %04x %04x %04x %04x %04x %04x", 
-			gBuffer[i], gBuffer[i+1], gBuffer[i+2], gBuffer[i+3], gBuffer[i+4], gBuffer[i+5], gBuffer[i+6], gBuffer[i+7]);
+		printf("%04x %04x %04x %04x %04x %04x %04x %04x",
+			gBuffer[i], gBuffer[i + 1], gBuffer[i + 2], gBuffer[i + 3], gBuffer[i + 4], gBuffer[i + 5], gBuffer[i + 6], gBuffer[i + 7]);
 		offset += gOffsetIncrement;//add 16 bytes to address
 	}
 	fflush(stdout);
@@ -69,8 +69,8 @@ void Display::DefaultPrint()
 
 void Display::OneByteOctalDisplay()
 {
-//0000000 043 012 043 040 124 150 151 163 040 146 151 154 145 040 143 157
-//0000010 156 164 141 151 156 163 040 143 157 156 146 151 147 165 162 141
+	//0000000 043 012 043 040 124 150 151 163 040 146 151 154 145 040 143 157
+	//0000010 156 164 141 151 156 163 040 143 157 156 146 151 147 165 162 141
 	DWORD i;
 	UINT32 offset = gStartOffsetValue;
 	for (i = 0; i < gBufferSize; i += gNoOfBits)
@@ -86,7 +86,7 @@ void Display::OneByteOctalDisplay()
 
 void Display::CharacterDisplay()
 {
-//	0000000   #  \n   #       T   h   i   s       f   i   l   e       c   o
+	//	0000000   #  \n   #       T   h   i   s       f   i   l   e       c   o
 	DWORD i;
 	UINT32 offset = gStartOffsetValue;
 	for (i = 0; i < gBufferSize; i += gNoOfBits)
@@ -95,6 +95,21 @@ void Display::CharacterDisplay()
 		for (byte b = 0; b < gNoOfBits; b++){
 			printf("%c %c ", gBuffer[i + b] >> 8, gBuffer[i + b]);
 		}
+		offset += gOffsetIncrement;
+	}
+	fflush(stdout);
+}
+void Display::DecimalDisplay()
+{
+	//0000000   02595   08227   26708   29545   26144   27753   08293   28515
+	//0000010   29806   26977   29550   25376   28271   26982   30055   24946
+	DWORD i;
+	UINT32 offset = gStartOffsetValue;
+	for (i = 0; i < gBufferSize; i += gNoOfBits)
+	{
+		printf("\n0x%08x  ", offset);
+		printf("%05d %05d %05d %05d %05d %05d %05d %05d",
+			gBuffer[i], gBuffer[i + 1], gBuffer[i + 2], gBuffer[i + 3], gBuffer[i + 4], gBuffer[i + 5], gBuffer[i + 6], gBuffer[i + 7]);
 		offset += gOffsetIncrement;
 	}
 	fflush(stdout);

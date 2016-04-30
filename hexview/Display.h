@@ -8,7 +8,9 @@ public:
 	void AsciiPrint();
 	void OneByteOctalDisplay();
 	void CharacterDisplay();
+	void DecimalDisplay();
 	void Configure(byte * buffer, DWORD bufferSize);
+
 	
 private:
 	byte *gBuffer;

@@ -47,7 +47,7 @@ void Display::AsciiPrint()
 			}
 		}
 		printf("|");
-		offset += 0x10;//add 16 bytes to address
+		offset += gOffsetIncrement;//add 16 bytes to address
 	}
 	fflush(stdout);
 }
@@ -62,7 +62,7 @@ void Display::DefaultPrint()
 		printf("\n0x%08x  ", offset);
 		printf("%04x %04x %04x %04x %04x %04x %04x %04x", 
 			gBuffer[i], gBuffer[i+1], gBuffer[i+2], gBuffer[i+3], gBuffer[i+4], gBuffer[i+5], gBuffer[i+6], gBuffer[i+7]);
-		offset += 0x10;//add 16 bytes to address
+		offset += gOffsetIncrement;//add 16 bytes to address
 	}
 	fflush(stdout);
 }
@@ -79,7 +79,23 @@ void Display::OneByteOctalDisplay()
 		for (byte b = 0; b < gNoOfBits; b++){
 			printf("%03o %03o ", gBuffer[i + b] >> 8, gBuffer[i + b]);
 		}
-		offset += 0x10;
+		offset += gOffsetIncrement;
+	}
+	fflush(stdout);
+}
+
+void Display::CharacterDisplay()
+{
+//	0000000   #  \n   #       T   h   i   s       f   i   l   e       c   o
+	DWORD i;
+	UINT32 offset = gStartOffsetValue;
+	for (i = 0; i < gBufferSize; i += gNoOfBits)
+	{
+		printf("\n0x%08x  ", offset);
+		for (byte b = 0; b < gNoOfBits; b++){
+			printf("%c %c ", gBuffer[i + b] >> 8, gBuffer[i + b]);
+		}
+		offset += gOffsetIncrement;
 	}
 	fflush(stdout);
 }

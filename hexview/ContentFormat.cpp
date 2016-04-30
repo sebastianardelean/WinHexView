@@ -30,6 +30,7 @@ void ContentFormat::AsciiPrint()
 	const byte dot_ascii_code = 0x2e;
 	const byte space_ascii_code = 0x20;
 	const byte size = gNoOfBytes * 2;
+	gContentStream.clear();
 	for (i = 0; i < gBufferSize; i += size)
 	{
 		gContentStream << "0x" << std::setfill('0') << std::setw(8) << std::hex << offset << "  ";
@@ -106,6 +107,7 @@ void ContentFormat::CharacterDisplay()
 	DWORD i;
 	UINT32 offset = gStartOffsetValue;
 	const byte size = gNoOfBytes * 2;
+	gContentStream.clear();
 	for (i = 0; i < gBufferSize; i += size)
 	{
 		gContentStream << "0x" << std::setfill('0') << std::setw(8) << std::hex << offset << "  ";
@@ -124,6 +126,7 @@ void ContentFormat::DecimalDisplay()
 	//0000010   29806   26977   29550   25376   28271   26982   30055   24946
 	DWORD i;
 	UINT32 offset = gStartOffsetValue;
+	gContentStream.clear();
 	for (i = 0; i < gBufferSize; i += gNoOfBytes)
 	{
 		gContentStream << "0x" << std::setfill('0') << std::setw(8) << std::hex << offset << "  ";

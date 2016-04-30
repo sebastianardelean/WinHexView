@@ -2,9 +2,9 @@
 #include "FileReader.h"
 
 
-FileReader::FileReader(std::wstring filePath)
+FileReader::FileReader()
 {
-	gFilePath = filePath;
+	
 	gFileHandle = nullptr;
 
 }
@@ -33,14 +33,17 @@ DWORD FileReader::Read(HANDLE hFile, void *buffer, INT64 count)throw (std::excep
 
 	return read_bytes;
 }
-
+void FileReader::SetInputFile(std::wstring filePath)
+{
+	gFilePath = filePath;
+}
 void *FileReader::LoadFileContent(DWORD *bufferSize) throw (std::exception)
 {
 
 	LARGE_INTEGER file_size;
 	UINT64 size;
 	memset(&file_size, 0, sizeof(LARGE_INTEGER));//set default to 0
-
+	
 	gFileHandle = CreateFile(gFilePath.c_str(),//filename, in UNICODE
 		GENERIC_READ,// open only for read,
 		FILE_SHARE_READ,//it can be shared with other process for read purpose

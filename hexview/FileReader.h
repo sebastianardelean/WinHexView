@@ -16,9 +16,10 @@ public:
 class FileReader
 {
 public:
-	FileReader(std::wstring filePath);
+	FileReader();
 	virtual ~FileReader();
 	void *LoadFileContent(DWORD *bufferSize) throw (std::exception);
+	void SetInputFile(std::wstring filePath);
 private:
 	DWORD Read(HANDLE hFile, void *buffer, INT64 count)throw (std::exception);
 	std::wstring gFilePath;

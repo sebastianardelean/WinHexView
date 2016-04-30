@@ -15,25 +15,52 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	void *buffer;
 	DWORD buffer_size;
+	bool is_display_option_set = false;
 	std::wstring file_path = L"";
-	
+
 	std::shared_ptr<Display>display = std::make_shared<Display>();
 	std::unique_ptr<Command> command(new Command(display));
-	
+	std::unique_ptr<FileReader> reader(new FileReader());
+
 	//set default print
 	command->SetExecuteMethod(&Display::DefaultPrint);
 
 	int arg_index;
 	for (arg_index = 1; arg_index < argc; arg_index++){
 		if (wcscmp(argv[arg_index], L"/A") == 0){
-			command->SetExecuteMethod(&Display::AsciiPrint);
+			if (!is_display_option_set){
+				command->SetExecuteMethod(&Display::AsciiPrint);
+				is_display_option_set = true;
+			}
 		}
 		if (wcscmp(argv[arg_index], L"/F") == 0){
 			file_path = argv[arg_index + 1];
 		}
+		if (wcscmp(argv[arg_index], L"/O") == 0){
+			if (!is_display_option_set){
+				command->SetExecuteMethod(&Display::OneByteOctalDisplay);
+				is_display_option_set = true;
+			}
+		}
+		if (wcscmp(argv[arg_index], L"/C") == 0){
+			if (!is_display_option_set){
+				command->SetExecuteMethod(&Display::CharacterDisplay);
+				is_display_option_set = true;
+			}
+		}
+		if (wcscmp(argv[arg_index], L"/D") == 0){
+			if (!is_display_option_set){
+				command->SetExecuteMethod(&Display::DecimalDisplay);
+				is_display_option_set = true;
+			}
+		}
+
+	}
+	if (file_path.empty() == true){
+		goto end;
 	}
 
-	std::unique_ptr<FileReader> reader(new FileReader(file_path));
+	reader->SetInputFile(file_path);
 	try{
 		if ((buffer = reader->LoadFileContent(&buffer_size)) != nullptr){
 			display->Configure((byte*)buffer, buffer_size);
@@ -46,7 +73,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		return -1;
 	}
 
-	delete []buffer;
+	delete[]buffer;
+end:
 	return 0;
 }
 
@@ -54,6 +82,19 @@ void print_help(_TCHAR *argv)
 {
 	std::wcout << argv << L" [Options]\n";
 	std::wcout << L"/F\t\tinput file[if not specified, stdin is used]\n";
-	std::wcout << L"/C\t\tdisplay ASCII characters\n";
-
+	std::wcout << L"/A\t\tdisplay ASCII characters\n";
+	std::wcout << L"/O\t\toctal display\n";
+	std::wcout << L"/C\t\toctal display\n";
+	std::wcout << L"/D\t\tdecimal display\n";
 }
+
+/*
+
+
+
+-n xx -C (-n xx= first xx bytes of file)
+00000000  23 0a 23 20 54 68 69 73  20 66 69 6c 65 20 63 6f  |#.# This file co|
+00000010  6e 74 61 69 6e 73 20 63  6f 6e 66 69 67 75 72 61  |ntains configura|
+
+
+*/

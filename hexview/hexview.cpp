@@ -112,4 +112,3 @@ void print_help(_TCHAR *argv)
 }
 
 
-//TODO: add output file option:)

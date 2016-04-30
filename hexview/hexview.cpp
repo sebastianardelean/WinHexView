@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "Display.h"
+#include "ContentFormat.h"
 #include "Command.h"
 #include "FileReader.h"
 
@@ -19,19 +19,19 @@ int _tmain(int argc, _TCHAR* argv[])
 	bool is_display_option_set = false;
 	std::wstring file_path = L"";
 
-	std::shared_ptr<Display>display = std::make_shared<Display>();
-	std::unique_ptr<Command> command(new Command(display));
+	std::shared_ptr<ContentFormat>format = std::make_shared<ContentFormat>();
+	std::unique_ptr<Command> command(new Command(format));
 	std::unique_ptr<FileReader> reader(new FileReader());
 
 	//set default print
-	command->SetExecuteMethod(&Display::DefaultPrint);
+	command->SetExecuteMethod(&ContentFormat::DefaultPrint);
 
 	//Start parsing arguments
 	int arg_index;
 	for (arg_index = 1; arg_index < argc; arg_index++){
 		if (wcscmp(argv[arg_index], L"/A") == 0){
 			if (!is_display_option_set){
-				command->SetExecuteMethod(&Display::AsciiPrint);
+				command->SetExecuteMethod(&ContentFormat::AsciiPrint);
 				is_display_option_set = true;
 			}
 		}
@@ -40,19 +40,19 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 		if (wcscmp(argv[arg_index], L"/O") == 0){
 			if (!is_display_option_set){
-				command->SetExecuteMethod(&Display::OneByteOctalDisplay);
+				command->SetExecuteMethod(&ContentFormat::OneByteOctalDisplay);
 				is_display_option_set = true;
 			}
 		}
 		if (wcscmp(argv[arg_index], L"/C") == 0){
 			if (!is_display_option_set){
-				command->SetExecuteMethod(&Display::CharacterDisplay);
+				command->SetExecuteMethod(&ContentFormat::CharacterDisplay);
 				is_display_option_set = true;
 			}
 		}
 		if (wcscmp(argv[arg_index], L"/D") == 0){
 			if (!is_display_option_set){
-				command->SetExecuteMethod(&Display::DecimalDisplay);
+				command->SetExecuteMethod(&ContentFormat::DecimalDisplay);
 				is_display_option_set = true;
 			}
 		}
@@ -72,8 +72,10 @@ int _tmain(int argc, _TCHAR* argv[])
 			if (upper_limit == 0){
 				upper_limit = buffer_size;
 			}
-			display->Configure((byte*)buffer, upper_limit);
+			format->Configure((byte*)buffer, upper_limit);
 			command->Execute();
+			std::cout << format->GetFormattedOutput() << std::flush;
+			
 		}
 
 	}

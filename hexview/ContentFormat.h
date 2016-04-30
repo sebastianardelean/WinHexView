@@ -1,16 +1,16 @@
 #pragma once
-class Display
+class ContentFormat
 {
 public:
-	Display();
-	virtual ~Display();
+	ContentFormat();
+	virtual ~ContentFormat();
 	void DefaultPrint();
 	void AsciiPrint();
 	void OneByteOctalDisplay();
 	void CharacterDisplay();
 	void DecimalDisplay();
 	void Configure(byte * buffer, DWORD bufferSize);
-
+	std::string GetFormattedOutput();
 	
 private:
 	byte *gBuffer;
@@ -18,5 +18,6 @@ private:
 	const byte gNoOfBytes = 8;
 	const UINT32 gStartOffsetValue = 0x00000000;
 	const byte gOffsetIncrement = 0x10;
+	std::stringstream gContentStream;
 };
 

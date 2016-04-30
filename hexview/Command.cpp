@@ -1,15 +1,15 @@
 #include "stdafx.h"
-#include "Display.h"
+#include "ContentFormat.h"
 #include "Command.h"
 
 
-Command::Command(std::shared_ptr<Display> obj)
+Command::Command(std::shared_ptr<ContentFormat> obj)
 {
 	
 	gObj = obj;
 }
 
-void Command::SetExecuteMethod(void(Display::*method)())
+void Command::SetExecuteMethod(void(ContentFormat::*method)())
 {
 	gMethod = method;
 }

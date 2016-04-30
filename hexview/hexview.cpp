@@ -15,8 +15,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	void *buffer;
 	DWORD buffer_size;
-
-	std::unique_ptr<FileReader> reader(new FileReader(argv[1]));
+	std::wstring file_path = L"";
+	
 	std::shared_ptr<Display>display = std::make_shared<Display>();
 	std::unique_ptr<Command> command(new Command(display));
 	
@@ -28,7 +28,12 @@ int _tmain(int argc, _TCHAR* argv[])
 		if (wcscmp(argv[arg_index], L"/A") == 0){
 			command->SetExecuteMethod(&Display::AsciiPrint);
 		}
+		if (wcscmp(argv[arg_index], L"/F") == 0){
+			file_path = argv[arg_index + 1];
+		}
 	}
+
+	std::unique_ptr<FileReader> reader(new FileReader(file_path));
 	try{
 		if ((buffer = reader->LoadFileContent(&buffer_size)) != nullptr){
 			display->Configure((byte*)buffer, buffer_size);
@@ -47,5 +52,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 void print_help(_TCHAR *argv)
 {
-	std::wcout << argv;
+	std::wcout << argv << L" [Options]\n";
+	std::wcout << L"/F\t\tinput file[if not specified, stdin is used]\n";
+	std::wcout << L"/C\t\tdisplay ASCII characters\n";
+
 }

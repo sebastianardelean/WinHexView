@@ -15,6 +15,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	void *buffer;
 	DWORD buffer_size;
+	DWORD upper_limit = 0;
 	bool is_display_option_set = false;
 	std::wstring file_path = L"";
 
@@ -25,6 +26,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//set default print
 	command->SetExecuteMethod(&Display::DefaultPrint);
 
+	//Start parsing arguments
 	int arg_index;
 	for (arg_index = 1; arg_index < argc; arg_index++){
 		if (wcscmp(argv[arg_index], L"/A") == 0){
@@ -54,6 +56,9 @@ int _tmain(int argc, _TCHAR* argv[])
 				is_display_option_set = true;
 			}
 		}
+		if (wcscmp(argv[arg_index], L"/N") == 0){
+			upper_limit = std::stoi(argv[arg_index + 1]);
+		}
 
 	}
 	if (file_path.empty() == true){
@@ -62,8 +67,12 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	reader->SetInputFile(file_path);
 	try{
+		
 		if ((buffer = reader->LoadFileContent(&buffer_size)) != nullptr){
-			display->Configure((byte*)buffer, buffer_size);
+			if (upper_limit == 0){
+				upper_limit = buffer_size;
+			}
+			display->Configure((byte*)buffer, upper_limit);
 			command->Execute();
 		}
 
@@ -89,12 +98,9 @@ void print_help(_TCHAR *argv)
 }
 
 /*
-
-
-
+TODO:
 -n xx -C (-n xx= first xx bytes of file)
 00000000  23 0a 23 20 54 68 69 73  20 66 69 6c 65 20 63 6f  |#.# This file co|
 00000010  6e 74 61 69 6e 73 20 63  6f 6e 66 69 67 75 72 61  |ntains configura|
-
-
 */
+//TODO: add output file option:)

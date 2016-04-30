@@ -15,7 +15,7 @@ public:
 private:
 	byte *gBuffer;
 	DWORD gBufferSize;
-	const byte gNoOfBits = 8;
+	const byte gNoOfBytes = 8;
 	const UINT32 gStartOffsetValue = 0x00000000;
 	const byte gOffsetIncrement = 0x10;
 };
